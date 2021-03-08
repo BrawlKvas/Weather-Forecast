@@ -1,0 +1,17 @@
+@import url('https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css');
+
+.geolocation-wrap {
+  position: relative;
+}
+
+.geolocation__map {
+  width: 450px !important;
+  height: 250px !important;
+}
+
+.geolocation__coordinates {
+  position: absolute;
+  z-index: 99;
+  top: 30px;
+  left: 35px;
+}

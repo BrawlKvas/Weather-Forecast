@@ -1,0 +1,51 @@
+.fact {
+  position: relative;
+  overflow: hidden;
+  width: 450px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.fact__datatime {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.fact__temp-wrap {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.fact__temp {
+  font-size: 36px;
+}
+
+.fact__icon {
+  margin: 0px 15px;
+}
+
+.fact__feels-like {
+  font-size: 14px;
+}
+
+.fact__props {
+  margin-top: 15px;
+  display: flex;
+}
+
+.fact__props .prop {
+  display: flex;
+  align-items: center;
+}
+
+.fact__props .prop > img {
+  margin-right: 4px;
+  width: 1.25em;
+}
+
+.fact__props .prop:not(:last-of-type) {
+  margin-right: 13px;
+}
