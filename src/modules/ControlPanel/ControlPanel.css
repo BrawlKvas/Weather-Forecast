@@ -1,0 +1,41 @@
+.control {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.control__btn {
+  border: none;
+  font-size: 16px;
+  background-color: inherit;
+  outline: none;
+  cursor: pointer;
+  transition: color .1s;
+}
+
+.control__btn:not(:last-of-type) {
+  margin-right: 25px;
+}
+
+.control__btn:hover {
+  color: #0984e3;
+}
+
+.control__btn:active {
+  color: #5caae6;
+}
+
+.control__form {
+  margin-left: 30px;
+}
+
+.control__btn > img {
+  height: 1em;
+}
+
+.control__form > input {
+  padding: 5px 0px 5px 5px;
+  outline: none;
+  font-size: 16px;
+}

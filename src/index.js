@@ -1,47 +1,37 @@
 import CurrentWeather from './modules/CurrentWeather'
 import Forecast from './modules/Forecast'
 import Geolocation from './modules/Geolocation'
-// import Control from './modules/Control'
+import ControlPanel from './modules/ControlPanel'
+
+import { LocationApi, GeocodingAPI, WeatherApi } from './services/api/api'
 
 import './index.css'
-import { LocationApi } from './services/api'
 
 const currentWeather = new CurrentWeather('.fact', { locale: 'ru' })
+const geolocation = new Geolocation('.geolocation-wrap', { locale: 'ru' })
+const weatherForecast = new Forecast('.forecast', { locale: 'ru' })
 
 currentWeather.init()
-
-setTimeout(() => currentWeather.setState({
-  location: 'Округ Сампсониевское, Санкт-Петербург',
-  condition: 'Снег',
-  temp: -1,
-  feelLike: -9,
-  wind: 2.4,
-  humidity: 89,
-  pressure: 720,
-}), 2000)
-
-const forecast = new Forecast('.forecast', {
-  state: {
-    days: [
-      { name: 'Понедельник', temp: -1, icon: '//cdn.weatherapi.com/weather/64x64/night/326.png' },
-      { name: 'Вторник', temp: 0, icon: '//cdn.weatherapi.com/weather/64x64/day/395.png' },
-      { name: 'Среда', temp: 2, icon: '//cdn.weatherapi.com/weather/64x64/night/320.png' },
-    ],
-  },
-})
-
-forecast.init()
-
-const geolocation = new Geolocation('.geolocation-wrap', { locale: 'ru' })
-
 geolocation.init()
+weatherForecast.init()
 
 LocationApi.getLocation()
   .then((data) => {
     const [lat, lng] = data.loc.split(',')
     geolocation.setLngLat(lng, lat)
+    GeocodingAPI.forwardGeocoding(lat, lng, 'ru')
+      .then(({ results }) => {
+        WeatherApi.getForecast(3, lat, lng, 'ru')
+          .then(({ current, forecast }) => {
+            currentWeather.setState({ location: results[0].components, current })
+            weatherForecast.setState({ forecastday: forecast.forecastday })
+          })
+      })
   })
 
-// const control = new Control('.control')
+const control = new ControlPanel('.control')
 
-// control.render()
+control.init()
+
+// ImageApi.getRandom()
+//   .then(({ urls }) => { document.body.style.backgroundImage = `url(${urls.full})` })

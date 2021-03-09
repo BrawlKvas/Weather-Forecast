@@ -1,5 +1,5 @@
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl'
-import createElement from '../../utils/index'
+import { createElement } from '../../utils/index'
 import S from '../../values/strings'
 
 import './Geolocation.css'
@@ -9,7 +9,7 @@ const ACCESS_TOKEN = 'pk.eyJ1Ijoia29zc3RlbGxhIiwiYSI6ImNrbHl2cWIyMTE4MjYyb282cjR
 class Geolocation {
   constructor(selector, option = {}) {
     this.$box = document.querySelector(selector)
-    this.$map = createElement('div', 'geolocation__map paper')
+    this.$map = createElement('div', 'geolocation__map')
 
     this.map = null
     this.marker = null
@@ -53,7 +53,7 @@ class Geolocation {
 
     this.$box
       .querySelector('.geolocation__coordinates')
-      .textContent = `${this.lat} с.ш. ${this.lng} в.д`
+      .textContent = `${this.lat} ${S.lat[this.locale]}. ${this.lng} ${S.lng[this.locale]}`
   }
 
   setLocale(locale) {

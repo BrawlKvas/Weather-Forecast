@@ -9,6 +9,8 @@ class Forecast {
     this.state = option.state || null
 
     this.locale = option.locale || 'en'
+
+    this.unitTemp = option.unitTemp || 'c'
   }
 
   init() {
@@ -20,8 +22,21 @@ class Forecast {
     this.render()
   }
 
+  setUnitTemp(value) {
+    if (value !== 'c' && value !== 'f') {
+      throw new Error('Wrong unit of temp')
+    }
+
+    this.unitTemp = value
+  }
+
   render() {
-    const { days } = this.state
+    if (!this.state) {
+      this.$box.innerHTML = '<div class="loader-wrap"><div class="loader"></div></div>'
+      return
+    }
+
+    const days = this.state.forecastday
 
     let html = ''
 
@@ -30,13 +45,17 @@ class Forecast {
       <div class="forecast__days">
     `
 
-    days.forEach((item) => {
+    days.forEach(({ date, day }) => {
+      const parsedDate = new Date(Date.parse(date))
+      const weekday = parsedDate.toLocaleDateString(this.locale, { weekday: 'long' })
+      const monthAndDay = parsedDate.toLocaleDateString(this.locale, { month: 'long', day: 'numeric' })
+
       html += /* html */`
       <div class="forecast__day">
-        <div class="forecast__name">${new Date().toLocaleDateString(this.locale, { weekday: 'long' })}</div>
-        <time class="forecast__date" datetime="2021-03-06 00:00+0300">${new Date().toLocaleDateString(this.locale, { month: 'long', day: 'numeric' })}</time>
-        <img class="forecast__icon" src="${item.icon}">
-        <span class="forecast__temp temp-value">${item.temp}</span>
+        <div class="forecast__name">${weekday}</div>
+        <time class="forecast__date" datetime="2021-03-06 00:00+0300">${monthAndDay}</time>
+        <img class="forecast__icon" src="${day.condition.icon}">
+        <span class="forecast__temp temp-value">${day[`avgtemp_${this.unitTemp}`]}</span>
       </div>
       `
     })

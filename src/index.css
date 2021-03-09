@@ -6,25 +6,31 @@
 }
 
 body {
-  background-color: #eceef2;
+  background-color: #cacaca;
   font-size: 16px;
   line-height: 20px;
+  background-size: cover;
 }
 
 .paper {
-  margin: 15px;
-  padding: 25px;
   border-radius: 12px;
   background-color: #fff;
-  box-shadow: 0 14px 20px rgba(0, 0, 0, 0.25)
+  box-shadow: 0 16px 22px rgba(0, 0, 0, 0.25)
 }
 
 #root {
-  min-width: 500px;
+  min-width: fit-content;
   padding: 20px;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+#root > .paper {
+  position: relative;
+  overflow: hidden;
+  margin: 15px;
+  padding: 25px;
 }
 
 .temp-value::after {

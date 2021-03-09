@@ -1,6 +1,4 @@
 .fact {
-  position: relative;
-  overflow: hidden;
   width: 450px;
   height: 220px;
   display: flex;
