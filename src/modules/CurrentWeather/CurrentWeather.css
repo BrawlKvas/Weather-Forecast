@@ -22,6 +22,8 @@
 }
 
 .fact__icon {
+  width: 64px;
+  height: 64px;
   margin: 0px 15px;
 }
 

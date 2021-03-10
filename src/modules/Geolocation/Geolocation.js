@@ -7,77 +7,68 @@ import './Geolocation.css'
 const ACCESS_TOKEN = 'pk.eyJ1Ijoia29zc3RlbGxhIiwiYSI6ImNrbHl2cWIyMTE4MjYyb282cjRhaTF3MGQifQ.biyNx_wJAzyQuuXgP-4HOQ'
 
 class Geolocation {
-  constructor(selector, option = {}) {
+  constructor(selector) {
     this.$box = document.querySelector(selector)
     this.$map = createElement('div', 'geolocation__map')
 
     this.map = null
     this.marker = null
-
-    this.lng = option.lng || 0
-    this.lat = option.lat || 0
-    this.zoom = option.zoom || 8
-
-    this.locale = option.locale || 'en'
   }
 
-  init() {
-    this.render()
-
+  initMap(lng, lat, locale) {
     mapboxgl.accessToken = ACCESS_TOKEN
     this.map = new mapboxgl.Map({
       container: this.$map,
       style: 'mapbox://styles/mapbox/streets-v11',
       interactive: false,
-      center: [this.lng, this.lat],
+      center: [lng, lat],
       zoom: this.zoom,
     })
 
     this.map.addControl(new mapboxgl.NavigationControl())
 
     this.marker = new mapboxgl.Marker()
-      .setLngLat([this.lng, this.lat])
+      .setLngLat([lng, lat])
       .addTo(this.map)
 
     this.map.on('load', () => {
-      this.updateLocaleOnMap()
+      this.updateLocaleOnMap(locale)
     })
   }
 
-  setLngLat(lng, lat) {
-    this.lng = lng
-    this.lat = lat
-
+  setLngLat(lng, lat, locale) {
     this.map.panTo([lng, lat])
     this.marker.setLngLat([lng, lat])
 
     this.$box
       .querySelector('.geolocation__coordinates')
-      .textContent = `${this.lat} ${S.lat[this.locale]}. ${this.lng} ${S.lng[this.locale]}`
+      .textContent = `${lat} ${S.lat[locale]}. ${lng} ${S.lng[locale]}`
   }
 
-  setLocale(locale) {
-    this.locale = locale
-    this.updateLocaleOnMap()
-  }
-
-  updateLocaleOnMap() {
+  updateLocaleOnMap(locale) {
     this.map.getStyle().layers.forEach((layer) => {
       if (layer.id.indexOf('-label') > 0) {
         this.map.setLayoutProperty(
           layer.id,
           'text-field',
-          ['get', `name_${this.locale}`],
+          ['get', `name_${locale}`],
         )
       }
     })
   }
 
-  render() {
+  render(props) {
     this.$box.innerHTML = `
-      <div class="geolocation__coordinates">${this.lat} ${S.lat[this.locale]}. ${this.lng} ${S.lng[this.locale]}</div>
+      <div class="geolocation__coordinates">${props.lat} ${S.lat[props.locale]}. ${props.lng} ${S.lng[props.locale]}</div>
     `
     this.$box.append(this.$map)
+
+    if (!this.map) {
+      this.initMap(props.lng, props.lat, props.locale)
+    } else {
+      this.setLngLat(props.lng, props.lat, props.locale)
+      this.updateLocaleOnMap(props.locale)
+    }
   }
 }
 

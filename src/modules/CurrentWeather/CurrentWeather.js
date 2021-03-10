@@ -1,5 +1,7 @@
 import S from '../../values/strings'
 
+import connect from './CurrentWeather.connect'
+
 import './CurrentWeather.css'
 
 const formatterOption = {
@@ -12,79 +14,47 @@ const formatterOption = {
 }
 
 class CurrentWeather {
-  constructor(selector, option = {}) {
+  constructor(selector) {
     this.$box = document.querySelector(selector)
 
-    this.state = option.state || null
-
-    this.locale = option.locale || 'en'
-
-    this.unitTemp = option.unitTemp || 'c'
-
-    this.formatter = new Intl.DateTimeFormat(this.locale, formatterOption)
-
-    this.loop = null
-  }
-
-  init() {
-    this.render()
-  }
-
-  setState(state) {
-    this.state = state
-    this.render()
+    this.state = {
+      formatter: null,
+      loop: null,
+    }
   }
 
   updateDate() {
-    this.$box.querySelector('.fact__datatime').textContent = this.formatter.format(new Date())
+    this.$box.querySelector('.fact__datatime').textContent = this.state.formatter.format(new Date())
   }
 
-  setLocale(locale) {
-    this.locale = locale
-    this.formatter = new Intl.DateTimeFormat(this.locale, formatterOption)
-  }
-
-  setUnitTemp(value) {
-    if (value !== 'c' && value !== 'f') {
-      throw new Error('Wrong unit of temp')
-    }
-
-    this.unitTemp = value
-  }
-
-  render() {
-    if (!this.state) {
+  render(props) {
+    if (props.isLoading) {
       this.$box.innerHTML = '<div class="loader-wrap"><div class="loader"></div></div>'
       return
     }
 
-    if (this.loop) {
-      clearInterval(this.loop)
-    }
+    clearInterval(this.loop)
+    this.state.loop = setInterval(this.updateDate.bind(this), 1000)
 
-    this.loop = setInterval(this.updateDate.bind(this), 1000)
-
-    const { location, current } = this.state
-    const { condition } = current
-
-    const date = this.formatter.format(new Date())
+    this.state.formatter = new Intl.DateTimeFormat(props.locale, formatterOption)
+    const date = this.state.formatter.format(new Date())
 
     this.$box.innerHTML = /* html */`
-      <h3 class="fact__location">${location.city}, ${location.country}</h3>
+      <h3 class="fact__location">${props.city}, ${props.country}</h3>
       <time class="fact__datatime">${date}</time>
 
       <div class="fact__temp-wrap">
         <div class="fact__temp">
-          <span class="temp-value">${current[`temp_${this.unitTemp}`]}</span>
+          <span class="temp-value">${props.temp}</span>
         </div>
 
-        <img class="fact__icon" src="${condition.icon}">
+        <img class="fact__icon" src="${props.icon}">
 
         <div class="fact__feelings">
-          <div class="fact__condition">${condition.text}</div>
+          <div class="fact__condition">${props.text}</div>
           <div class="fact__feels-like">
-            ${S.feelsLike[this.locale]}
-            <span class="temp-value">${current.feelslike_c}</span>
+            ${S.feelsLike[props.locale]}
+            <span class="temp-value">${props.feelslike}</span>
           </div>
         </div>
       </div>
@@ -92,19 +62,19 @@ class CurrentWeather {
       <div class="fact__props">
         <div class="prop fact__wind-speed">
           <img src="./../src/image/wind.svg">
-          ${(current.wind_kph / 3.6).toFixed(1)} ${S.metersPerSecond[this.locale]}
+          ${(props.wind / 3.6).toFixed(1)} ${S.metersPerSecond[props.locale]}
         </div>
         <div class="prop fact__humidity">
           <img src="./../src/image/rain.svg">
-          ${current.humidity}%
+          ${props.humidity}%
         </div>
         <div class="prop fact__pressure">
           <img src="./../src/image/compass.svg">
-          ${current.precip_mm} ${S.millimetersOfMercury[this.locale]}
+          ${props.pressure} ${S.millimetersOfMercury[props.locale]}
         </div>
       </div>
     `
   }
 }
 
-export default CurrentWeather
+export default connect(CurrentWeather)

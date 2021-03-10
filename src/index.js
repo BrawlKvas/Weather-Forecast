@@ -1,37 +1,29 @@
 import CurrentWeather from './modules/CurrentWeather'
-import Forecast from './modules/Forecast'
-import Geolocation from './modules/Geolocation'
-import ControlPanel from './modules/ControlPanel'
+// import Forecast from './modules/Forecast'
+// import Geolocation from './modules/Geolocation'
+import { dispatch } from './store/store'
 
-import { LocationApi, GeocodingAPI, WeatherApi } from './services/api/api'
+import { setLocation, setCurrent, setForecast } from './store/actions'
 
 import './index.css'
+import { LocationApi, GeocodingAPI, WeatherApi } from './services/api/api'
 
-const currentWeather = new CurrentWeather('.fact', { locale: 'ru' })
-const geolocation = new Geolocation('.geolocation-wrap', { locale: 'ru' })
-const weatherForecast = new Forecast('.forecast', { locale: 'ru' })
+const currentWeather = new CurrentWeather('.fact')
+// const geolocation = new Geolocation('.geolocation-wrap')
+// const weatherForecast = new Forecast('.forecast')
 
-currentWeather.init()
-geolocation.init()
-weatherForecast.init()
+const initApp = () => async (dispatch, { locale }) => {
+  const { loc } = await LocationApi.getLocation()
+  const [lat, lng] = loc.split(',')
 
-LocationApi.getLocation()
-  .then((data) => {
-    const [lat, lng] = data.loc.split(',')
-    geolocation.setLngLat(lng, lat)
-    GeocodingAPI.forwardGeocoding(lat, lng, 'ru')
-      .then(({ results }) => {
-        WeatherApi.getForecast(3, lat, lng, 'ru')
-          .then(({ current, forecast }) => {
-            currentWeather.setState({ location: results[0].components, current })
-            weatherForecast.setState({ forecastday: forecast.forecastday })
-          })
-      })
-  })
+  const { results } = await GeocodingAPI.forwardGeocoding(lat, lng, locale)
 
-const control = new ControlPanel('.control')
+  dispatch(setLocation({ ...results[0].components, ...results[0].geometry }))
 
-control.init()
+  const { current, forecast } = await WeatherApi.getForecast(3, lat, lng, locale)
 
-// ImageApi.getRandom()
-//   .then(({ urls }) => { document.body.style.backgroundImage = `url(${urls.full})` })
+  dispatch(setCurrent(current))
+  dispatch(setForecast(forecast))
+}
+
+dispatch(initApp())

@@ -1,5 +1,8 @@
 import { ImageApi } from '../../services/api/api'
 import { changeBackgoundImage } from '../../utils'
+
+import * as S from '../../values/strings'
+
 import './ControlPanel.css'
 
 const CHANGE_BACKGROUND = 'change_background'
@@ -7,14 +10,6 @@ const CHANGE_BACKGROUND = 'change_background'
 class ControlPanel {
   constructor(selector) {
     this.$box = document.querySelector(selector)
-  }
-
-  init() {
-    this.render()
-
-    this.$box
-      .querySelector('.control__btns')
-      .addEventListener('click', this.clickHandler.bind(this))
   }
 
   clickHandler({ target }) {
@@ -29,18 +24,22 @@ class ControlPanel {
     }
   }
 
-  render() {
+  render({ locale }) {
     this.$box.innerHTML = /* html */`
       <div class="control__btns">
-        <button class="control__btn" data-action="change_background">Сменить фон</button>
-        <button class="control__btn">Сменить язык</button>
-        <button class="control__btn">Сменить единицу температуры</button>
+        <button class="control__btn" data-action="change_background">${S.changeBackgound[locale]}</button>
+        <button class="control__btn">${S.changeLanguage[locale]}</button>
+        <button class="control__btn">${S.changeTemperatureUnit[locale]}</button>
       </div>
 
       <form class="control__form">
-        <input type="text" name="placename" placeholder="Город или район">
+        <input type="text" name="placename" placeholder="${S.cityOrDistrict[locale]}">
       </form>
     `
+
+    this.$box
+      .querySelector('.control__btns')
+      .addEventListener('click', this.clickHandler.bind(this))
   }
 }
 
