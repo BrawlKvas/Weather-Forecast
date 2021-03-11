@@ -4,6 +4,6 @@ export const IMAGE_API_TOKEN = 'nHsGPEg8EiRZnDmSkefr_HVlAPOUK-E4vYOUy5xRbZI'
 export const GEOCODING_API_TOKEN = 'c7f9fd28eb604eb39a5c4c52bc1922eb'
 
 export const LOCATION_API_BASE_URL = 'https://ipinfo.io/'
-export const WEATHER_API_BASE_URL = 'http://api.weatherapi.com/v1/'
+export const WEATHER_API_BASE_URL = 'https://api.weatherapi.com/v1/'
 export const IMAGE_API_BASE_URL = 'https://api.unsplash.com/'
 export const GEOCODING_API_BASE_URL = 'https://api.opencagedata.com/geocode/v1/'

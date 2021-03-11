@@ -1,4 +1,7 @@
 import S from '../../values/strings'
+import compassImg from '../../image/compass.svg'
+import rainImg from '../../image/rain.svg'
+import windImg from '../../image/wind.svg'
 
 import connect from './CurrentWeather.connect'
 
@@ -62,15 +65,15 @@ function CurrentWeather(selector) {
 
       <div class="fact__props">
         <div class="prop fact__wind-speed">
-          <img src="./../src/image/wind.svg">
+          <img src="${windImg}">
           ${(props.wind / 3.6).toFixed(1)} ${S.metersPerSecond[props.locale]}
         </div>
         <div class="prop fact__humidity">
-          <img src="./../src/image/rain.svg">
+          <img src="${rainImg}">
           ${props.humidity}%
         </div>
         <div class="prop fact__pressure">
-          <img src="./../src/image/compass.svg">
+          <img src="${compassImg}">
           ${props.pressure} ${S.millimetersOfMercury[props.locale]}
         </div>
       </div>
