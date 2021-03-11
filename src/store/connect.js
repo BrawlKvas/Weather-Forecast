@@ -1,27 +1,28 @@
 import store, { dispatch } from './store'
 
-function connect(mapStateToProps, mapDispatchToProps) {
-  return (component) => {
-    class Wrapper extends component {
-      constructor(...args) {
-        super(...args)
+const noop = () => { }
 
-        store.subscribe(this.render.bind(this))
-        this.render()
-      }
+function connect(_mapStateToProps, _mapDispatchToProps) {
+  const mapStateToProps = _mapStateToProps || noop
+  const mapDispatchToProps = _mapDispatchToProps || noop
 
-      render() {
-        // SOME CODE
+  return (Component) => {
+    const wrapper = (...args) => {
+      const renderComponent = Component(...args)
+
+      const render = () => {
         const props = {
           ...mapStateToProps(store.getState()),
           ...mapDispatchToProps(dispatch.bind(store)),
         }
 
-        super.render(props)
+        renderComponent(props)
       }
+
+      store.subscribe(render)
     }
 
-    return Wrapper
+    return wrapper
   }
 }
 

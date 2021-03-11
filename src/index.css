@@ -12,6 +12,10 @@ body {
   background-size: cover;
 }
 
+.d-none {
+  display: none;
+}
+
 .paper {
   border-radius: 12px;
   background-color: #fff;
@@ -33,8 +37,13 @@ body {
   padding: 25px;
 }
 
-.temp-value::after {
-  content: '\00B0';
+.temp-c::after {
+  content: ' C\00B0';
+  font-weight: 500;
+}
+
+.temp-f::after {
+  content: ' F\00B0';
   font-weight: 500;
 }
 

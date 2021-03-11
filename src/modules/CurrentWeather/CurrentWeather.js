@@ -13,39 +13,40 @@ const formatterOption = {
   second: 'numeric',
 }
 
-class CurrentWeather {
-  constructor(selector) {
-    this.$box = document.querySelector(selector)
+function CurrentWeather(selector) {
+  const $box = document.querySelector(selector)
 
-    this.state = {
-      formatter: null,
-      loop: null,
-    }
+  let formatter = null
+  let loop = null
+
+  function updateDate() {
+    $box.querySelector('.fact__datatime').textContent = formatter.format(new Date())
   }
 
-  updateDate() {
-    this.$box.querySelector('.fact__datatime').textContent = this.state.formatter.format(new Date())
-  }
+  return (props) => {
+    clearInterval(loop)
 
-  render(props) {
-    if (props.isLoading) {
-      this.$box.innerHTML = '<div class="loader-wrap"><div class="loader"></div></div>'
+    if (!props.isReady) {
+      $box.innerHTML = `
+        <div class="loader-wrap">
+          <div class="loader"></div>
+        </div>
+      `
       return
     }
 
-    clearInterval(this.loop)
-    this.state.loop = setInterval(this.updateDate.bind(this), 1000)
+    loop = setInterval(updateDate, 1000)
 
-    this.state.formatter = new Intl.DateTimeFormat(props.locale, formatterOption)
-    const date = this.state.formatter.format(new Date())
+    formatter = new Intl.DateTimeFormat(props.locale, formatterOption)
+    const date = formatter.format(new Date())
 
-    this.$box.innerHTML = /* html */`
-      <h3 class="fact__location">${props.city}, ${props.country}</h3>
+    $box.innerHTML = /* html */`
+      <h3 class="fact__location">${props.city ? `${props.city},` : ''} ${props.country}</h3>
       <time class="fact__datatime">${date}</time>
 
       <div class="fact__temp-wrap">
         <div class="fact__temp">
-          <span class="temp-value">${props.temp}</span>
+          <span class="temp-${props.unitTemp}">${props.temp}</span>
         </div>
 
         <img class="fact__icon" src="${props.icon}">
@@ -54,7 +55,7 @@ class CurrentWeather {
           <div class="fact__condition">${props.text}</div>
           <div class="fact__feels-like">
             ${S.feelsLike[props.locale]}
-            <span class="temp-value">${props.feelslike}</span>
+            <span class="temp-${props.unitTemp}">${props.feelslike}</span>
           </div>
         </div>
       </div>

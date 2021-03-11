@@ -12,7 +12,9 @@ async function request(...args) {
 
 export const LocationApi = {
   getLocation() {
-    return request(`https://ipinfo.io/json?token=${C.LOCATION_API_TOKEN}`)
+    return request(`
+      ${C.LOCATION_API_BASE_URL}json?token=${C.LOCATION_API_TOKEN}
+    `)
   },
 }
 
@@ -26,18 +28,22 @@ export const WeatherApi = {
 
 export const ImageApi = {
   getRandom() {
-    return request(`https://api.unsplash.com/photos/random?orientation=landscape&per_page=1&query=Wallpapers&client_id=${C.IMAGE_API_TOKEN}`)
+    return request(`
+      ${C.IMAGE_API_BASE_URL}photos/random?orientation=landscape&per_page=1&query=Wallpapers&client_id=${C.IMAGE_API_TOKEN}
+    `)
   },
 }
 
 export const GeocodingAPI = {
   reverseGeocoding(placename, lang = 'en') {
-    return request(`https://api.opencagedata.com/geocode/v1/json?q=${placename}&key=${C.GEOCODING_API_TOKEN}&language=${lang}`)
+    return request(`
+      ${C.GEOCODING_API_BASE_URL}json?q=${placename}&key=${C.GEOCODING_API_TOKEN}&language=${lang}
+    `)
   },
 
   forwardGeocoding(lat, lng, lang = 'en') {
     return request(`
-      https://api.opencagedata.com/geocode/v1/json?q=${lat},${lng}&key=${C.GEOCODING_API_TOKEN}&language=${lang}
+      ${C.GEOCODING_API_BASE_URL}json?q=${lat},${lng}&key=${C.GEOCODING_API_TOKEN}&language=${lang}
     `)
   },
 }
