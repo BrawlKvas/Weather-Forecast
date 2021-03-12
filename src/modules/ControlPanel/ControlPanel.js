@@ -52,7 +52,7 @@ function ControlPanel(selector) {
           placeholder="${S.cityOrDistrict[locale]}" 
         />
 
-        <button class="control__btn-search">Поиск</button>
+        <button class="control__btn-search">${S.search[locale]}</button>
 
         <div class="control__no-found d-none">${S.noFound[locale]}</div>
         

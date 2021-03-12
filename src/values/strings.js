@@ -8,4 +8,5 @@ export default {
   changeBackgound: { ru: 'Сменить фон', en: 'Change the backgound' },
   cityOrDistrict: { ru: 'Город или район', en: 'City or district' },
   noFound: { ru: 'Не найдено', en: 'No found' },
+  search: { ru: 'Поиск', en: 'Search' },
 }
