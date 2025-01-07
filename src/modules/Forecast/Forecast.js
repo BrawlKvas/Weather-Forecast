@@ -33,7 +33,7 @@ function Forecast(selector) {
         <div class="forecast__name">${weekday}</div>
         <time class="forecast__date" datetime="2021-03-06 00:00+0300">${monthAndDay}</time>
         <img class="forecast__icon" src="${day.condition.icon}">
-        <span class="forecast__temp temp-${unitTemp}">${day[`avgtemp_${unitTemp}`]}</span>
+        <span class="forecast__temp temp-${unitTemp}">${day[`avgtemp_${unitTemp}`].toFixed(0)}</span>
       </div>
       `
     })

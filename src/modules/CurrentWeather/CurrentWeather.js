@@ -49,7 +49,7 @@ function CurrentWeather(selector) {
 
       <div class="fact__temp-wrap">
         <div class="fact__temp">
-          <span class="temp-${props.unitTemp}">${props.temp}</span>
+          <span class="temp-${props.unitTemp}">${props.temp.toFixed(0)}</span>
         </div>
 
         <img class="fact__icon" src="${props.icon}">
